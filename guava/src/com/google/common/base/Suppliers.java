@@ -126,13 +126,23 @@ public final class Suppliers {
       if (!initialized) {
         synchronized (this) {
           if (!initialized) {
+            // the temporary variable t is useless(i think)
             T t = delegate.get();
             value = t;
-            initialized = true;
+            initialized = true;	// previous write operation sure to readable by other thread
             return t;
           }
         }
       }
+      //      // why not just make value volatile, and do 1-field double checked
+      //      if (value == null) {
+      //          synchronized (this) {
+      //              if (value == null) {
+      //                  value = delegate.get();
+      //                  return value;
+      //              }
+      //          }
+      //      }
       return value;
     }
 
